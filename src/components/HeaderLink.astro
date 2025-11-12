@@ -7,15 +7,21 @@ type Props = HTMLAttributes<'a'>;
 const { href, class: className, ...props } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 
-let currentPath = Astro.url.pathname;
-if (lang !== 'si') {
-  currentPath = currentPath.replace(`/${lang}`, '');
+const currentPathname = Astro.url.pathname.replace(/\/$/, ''); // Remove trailing slash from current pathname
+const linkHref = href.replace(/\/$/, ''); // Remove trailing slash from link href
+
+let isActive = false;
+
+if (lang === 'si') {
+  // For default language, compare directly
+  isActive = linkHref === currentPathname;
+} else {
+  // For other languages, compare after removing the language prefix from current pathname
+  const pathnameWithoutLang = currentPathname.startsWith(`/${lang}`)
+    ? currentPathname.substring(`/${lang}`.length)
+    : currentPathname;
+  isActive = linkHref === pathnameWithoutLang;
 }
-
-const normalizedHref = href.startsWith('/') ? href : `/${href}`;
-const normalizedCurrentPath = currentPath.startsWith('/') ? currentPath : `/${currentPath}`;
-
-const isActive = normalizedHref === normalizedCurrentPath;
 ---
 
 <a href={href} class:list={[className, { active: isActive }]} {...props}>
