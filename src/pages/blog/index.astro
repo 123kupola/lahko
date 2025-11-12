@@ -10,6 +10,12 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 const posts = (await getCollection('blog'))
 	.filter((post) => post.id.startsWith('si/'))
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+console.log('--- Debugging blog posts in src/pages/blog/index.astro ---');
+posts.forEach(post => {
+  console.log(`Post ID: ${post.id}, Post Slug: ${post.slug}`);
+});
+console.log('--- End Debugging ---');
 ---
 
 <!doctype html>
