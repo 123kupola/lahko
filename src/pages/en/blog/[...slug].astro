@@ -2,10 +2,12 @@
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BlogPost from '../../../layouts/BlogPost.astro';
 
+export const prerender = true;
+
 export async function getStaticPaths() {
 	const posts = (await getCollection('blog')).filter(post => post.id.startsWith('en/'));
 	return posts.map((post) => ({
-		params: { slug: post.slug.substring(post.slug.indexOf('/') + 1) },
+		params: { slug: post.slug },
 		props: post,
 	}));
 }
