@@ -25,13 +25,13 @@ const getLink = (path: string) => {
 		</div>
 		<div class="language-switcher">
 			<a href="/" class="lang-link" title="Slovenščina">
-				<span class={lang === 'si' ? 'active' : ''}>🇸🇮 SI</span>
+				{lang === 'si' ? <span class="active">Slovenščina</span> : '🇸🇮'}
 			</a>
 			<a href="/en" class="lang-link" title="English">
-				<span class={lang === 'en' ? 'active' : ''}>🇬🇧 EN</span>
+				{lang === 'en' ? <span class="active">English</span> : '🇬🇧'}
 			</a>
 			<a href="/hr" class="lang-link" title="Hrvatski">
-				<span class={lang === 'hr' ? 'active' : ''}>🇭🇷 HR</span>
+				{lang === 'hr' ? <span class="active">Hrvatski</span> : '🇭🇷'}
 			</a>
 		</div>
 	</nav>
@@ -87,7 +87,7 @@ const getLink = (path: string) => {
 	.lang-link span.active {
 		background-color: rgba(var(--accent), 0.3);
 		border-bottom: 2px solid rgb(var(--accent));
-		border-radius: 50%;
+		border-radius: 4px;
 	}
 	@media (max-width: 720px) {
 		.language-switcher {
