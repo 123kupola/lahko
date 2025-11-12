@@ -98,10 +98,11 @@ console.log('--- End Debugging ---');
 			<section>
 				<ul>
 					{
-						posts.map((post) => (
-							post.slug && (
+						posts.map((post) => {
+							const slug = post.id.substring(post.id.indexOf('/') + 1);
+							return (
 							<li>
-								<a href={`/blog/${post.slug}/`}>
+								<a href={`/blog/${slug}/`}>
 									{post.data.heroImage && (
 										<Image width={720} height={360} src={post.data.heroImage} alt="" />
 									)}
@@ -111,8 +112,8 @@ console.log('--- End Debugging ---');
 									</p>
 								</a>
 							</li>
-							)
-						))
+							);
+						})
 					}
 				</ul>
 			</section>
