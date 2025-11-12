@@ -24,9 +24,15 @@ const getLink = (path: string) => {
 			<HeaderLink href={getLink('/about')}>{t('nav.about')}</HeaderLink>
 		</div>
 		<div class="language-switcher">
-			<a href="/" class={`lang-link ${lang === 'si' ? 'active' : ''}`} title="Slovenščina">🇸🇮</a>
-			<a href="/en" class={`lang-link ${lang === 'en' ? 'active' : ''}`} title="English">🇬🇧</a>
-			<a href="/hr" class={`lang-link ${lang === 'hr' ? 'active' : ''}`} title="Hrvatski">🇭🇷</a>
+			<a href="/" class="lang-link" title="Slovenščina">
+				<span class={lang === 'si' ? 'active' : ''}>🇸🇮 SI</span>
+			</a>
+			<a href="/en" class="lang-link" title="English">
+				<span class={lang === 'en' ? 'active' : ''}>🇬🇧 EN</span>
+			</a>
+			<a href="/hr" class="lang-link" title="Hrvatski">
+				<span class={lang === 'hr' ? 'active' : ''}>🇭🇷 HR</span>
+			</a>
 		</div>
 	</nav>
 </header>
@@ -68,14 +74,17 @@ const getLink = (path: string) => {
 	.lang-link {
 		font-size: 1.2em;
 		padding: 0.5em;
-		border-radius: 4px;
 		transition: background-color 0.2s ease;
 		text-decoration: none;
 	}
 	.lang-link:hover {
 		background-color: rgba(var(--gray), 0.1);
 	}
-	.lang-link.active {
+	.lang-link span {
+		padding: 0.5em;
+		border-radius: 4px;
+	}
+	.lang-link span.active {
 		background-color: rgba(var(--accent), 0.3);
 		border-bottom: 2px solid rgb(var(--accent));
 		border-radius: 50%;
