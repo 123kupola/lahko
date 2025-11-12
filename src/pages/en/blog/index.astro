@@ -93,6 +93,7 @@ const posts = (await getCollection('blog'))
 				<ul>
 					{
 						posts.map((post) => (
+							post.slug && (
 							<li>
 								<a href={`/en/blog/${post.slug}/`}>
 									{post.data.heroImage && (
@@ -104,6 +105,7 @@ const posts = (await getCollection('blog'))
 									</p>
 								</a>
 							</li>
+							)
 						))
 					}
 				</ul>
