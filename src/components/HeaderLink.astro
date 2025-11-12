@@ -12,7 +12,10 @@ if (lang !== 'si') {
   currentPath = currentPath.replace(`/${lang}`, '');
 }
 
-const isActive = href === currentPath || href === currentPath + '/';
+const normalizedHref = href.replace(/^\/|\/$/g, '');
+const normalizedCurrentPath = currentPath.replace(/^\/|\/$/g, '');
+
+const isActive = normalizedHref === normalizedCurrentPath;
 ---
 
 <a href={href} class:list={[className, { active: isActive }]} {...props}>
