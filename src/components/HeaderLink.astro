@@ -12,8 +12,8 @@ if (lang !== 'si') {
   currentPath = currentPath.replace(`/${lang}`, '');
 }
 
-const normalizedHref = href.replace(/^\/|\/$/g, '');
-const normalizedCurrentPath = currentPath.replace(/^\/|\/$/g, '');
+const normalizedHref = href.startsWith('/') ? href : `/${href}`;
+const normalizedCurrentPath = currentPath.startsWith('/') ? currentPath : `/${currentPath}`;
 
 const isActive = normalizedHref === normalizedCurrentPath;
 ---
