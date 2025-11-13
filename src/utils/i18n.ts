@@ -1,4 +1,3 @@
-
 export const languages = {
   en: 'English',
   si: 'Slovenian',
@@ -7,33 +6,14 @@ export const languages = {
 
 export const defaultLang = 'si';
 
-export const ui = {
-  en: {
-    'nav.home': 'Home',
-    'nav.about': 'About',
-    'nav.blog': 'Blog',
-    'nav.twitter': 'Twitter',
-  },
-  si: {
-    'nav.home': 'Domov',
-    'nav.about': 'O nas',
-    'nav.blog': 'Blog',
-  },
-  hr: {
-    'nav.home': 'Početna',
-    'nav.about': 'O nama',
-    'nav.blog': 'Blog',
-  }
-} as const;
-
 export function getLangFromUrl(url: URL) {
   const [, lang] = url.pathname.split('/');
-  if (lang in ui) return lang as keyof typeof ui;
+  if (lang in languages) return lang as keyof typeof languages; // Use languages for type checking
   return defaultLang;
 }
 
-export function useTranslations(lang: keyof typeof ui) {
-  return function t(key: keyof typeof ui[typeof defaultLang]) {
+export function useTranslations(lang: keyof typeof languages, ui: Record<string, Record<string, string>>) {
+  return function t(key: string) {
     return ui[lang]?.[key] || ui[defaultLang][key];
   }
 }

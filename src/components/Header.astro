@@ -2,15 +2,40 @@
 ---
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
-import { getLangFromUrl, useTranslations } from '../utils/i18n';
+import { getLangFromUrl, useTranslations, defaultLang, languages } from '../utils/i18n';
+
+import si from '../i18n/si.json';
+import en from '../i18n/en.json';
+import hr from '../i18n/hr.json';
+
+const ui = {
+  en,
+  si,
+  hr,
+};
 
 const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
+const t = useTranslations(lang, ui);
 
-const currentPath = Astro.url.pathname.replace(`/${lang}`, '');
+const getLanguageSwitcherLink = (targetLang: keyof typeof languages) => {
+	const basePath = Astro.url.pathname.startsWith(`/${lang}`)
+		? Astro.url.pathname.substring(`/${lang}`.length)
+		: Astro.url.pathname;
 
-const getLink = (targetLang: string, path: string) => {
-	if (targetLang === 'si') {
+	let path = basePath;
+	// If we are on a contact page, use the correct slug for the target language
+	if (basePath === '/contact' || basePath === '/kontakt') {
+		path = targetLang === 'en' ? '/contact' : '/kontakt';
+	}
+
+	if (targetLang === defaultLang) {
+		return path || '/'; // Ensure root path is returned correctly
+	}
+	return `/${targetLang}${path}`;
+};
+
+const getLink = (targetLang: keyof typeof languages, path: string) => {
+	if (targetLang === defaultLang) {
 		return path;
 	}
 	return `/${targetLang}${path}`;
@@ -24,15 +49,16 @@ const getLink = (targetLang: string, path: string) => {
 			<HeaderLink href={getLink(lang, '/')}>{t('nav.home')}</HeaderLink>
 			<HeaderLink href={getLink(lang, '/blog')}>{t('nav.blog')}</HeaderLink>
 			<HeaderLink href={getLink(lang, '/about')}>{t('nav.about')}</HeaderLink>
+			<HeaderLink href={getLink(lang, lang === 'en' ? '/contact' : '/kontakt')}>{t('nav.contact')}</HeaderLink>
 		</div>
 		<div class="language-switcher">
-			<a href={getLink('si', currentPath)} class="lang-link" title="Slovenščina">
+			<a href={getLanguageSwitcherLink('si')} class="lang-link" title="Slovenščina">
 				{lang === 'si' ? <span class="active">Si</span> : '🇸🇮'}
 			</a>
-			<a href={getLink('hr', currentPath)} class="lang-link" title="Hrvatski">
+			<a href={getLanguageSwitcherLink('hr')} class="lang-link" title="Hrvatski">
 				{lang === 'hr' ? <span class="active">Hr</span> : '🇭🇷'}
 			</a>
-			<a href={getLink('en', currentPath)} class="lang-link" title="English">
+			<a href={getLanguageSwitcherLink('en')} class="lang-link" title="English">
 				{lang === 'en' ? <span class="active">En</span> : '🇬🇧'}
 			</a>
 		</div>

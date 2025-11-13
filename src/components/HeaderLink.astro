@@ -1,26 +1,39 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
-import { getLangFromUrl } from '../utils/i18n';
+import { getLangFromUrl, defaultLang } from '../utils/i18n';
 
 type Props = HTMLAttributes<'a'>;
 
 const { href, class: className, ...props } = Astro.props;
+
 const lang = getLangFromUrl(Astro.url);
 
-const currentPathname = Astro.url.pathname.replace(/\/$/, ''); // Remove trailing slash from current pathname
-const linkHref = href.replace(/\/$/, ''); // Remove trailing slash from link href
+// Normalize path to remove trailing slash for consistent comparison
+const normalizePath = (path: string) => (path.length > 1 && path.endsWith('/')) ? path.slice(0, -1) : path;
+
+const currentPath = normalizePath(Astro.url.pathname);
+const linkPath = normalizePath(href!);
+
+// Function to get the base path by stripping the language prefix
+const getBasePath = (path: string, lang: string) => {
+  if (lang !== defaultLang && path.startsWith(`/${lang}`)) {
+    const basePath = path.substring(`/${lang}`.length);
+    return basePath || '/'; // Return '/' if the path was just the language code (e.g., /en)
+  }
+  return path;
+};
+
+const currentBasePath = getBasePath(currentPath, lang);
+const linkBasePath = getBasePath(linkPath, lang);
 
 let isActive = false;
-
-if (lang === 'si') {
-  // For default language, compare directly
-  isActive = linkHref === currentPathname;
+// The homepage link is only active on the exact homepage
+if (linkBasePath === '/') {
+  isActive = currentBasePath === '/';
 } else {
-  // For other languages, compare after removing the language prefix from current pathname
-  const pathnameWithoutLang = currentPathname.startsWith(`/${lang}`)
-    ? currentPathname.substring(`/${lang}`.length)
-    : currentPathname;
-  isActive = linkHref === pathnameWithoutLang;
+  // Other links are active if the current path starts with the link's path
+  // e.g., link to '/blog' is active on '/blog/my-post'
+  isActive = currentBasePath.startsWith(linkBasePath);
 }
 ---
 

@@ -2,9 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import HeroSection from '../components/sections/HeroSection.astro';
-import FeaturesGrid from '../components/sections/FeaturesGrid.astro';
-import CTASection from '../components/sections/CTASection.astro';
+import ContactSection from '../components/sections/ContactSection.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import { getLangFromUrl, useTranslations } from '../utils/i18n';
 
@@ -25,14 +23,12 @@ const t = useTranslations(lang, ui);
 <!doctype html>
 <html lang={lang}>
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead title={`${t('contact.title')} | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
 		<Header />
 		<main>
-			<HeroSection t={t} />
-			<FeaturesGrid t={t} />
-			<CTASection t={t} />
+			<ContactSection t={t} />
 		</main>
 		<Footer />
 	</body>
